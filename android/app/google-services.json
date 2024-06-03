@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "276968077214",
+    "project_id": "testrru-83eea",
+    "storage_bucket": "testrru-83eea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276968077214:android:74145e66f2faa750b7088f",
+        "android_client_info": {
+          "package_name": "com.md.testrru"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEIFGQgXTORc-q356k-HREHARtnfuSW5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

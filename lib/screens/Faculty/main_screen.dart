@@ -27,28 +27,30 @@ class _MainScreenFState extends State<MainScreenF> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: _widgetOptions.elementAt(_selectedIndex),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'Faculty',
-            ),
+    return PopScope(
+      canPop: false,
+       child: Scaffold(
+          body: _widgetOptions.elementAt(_selectedIndex),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.school),
+                label: 'Faculty',
+              ),
 
-            BottomNavigationBarItem(
-              icon: Icon(Icons.emoji_emotions),
-              label: 'Profile',
-            ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.emoji_emotions),
+                label: 'Profile',
+              ),
 
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.black,
-          onTap: _onItemTapped,
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.black,
+            onTap: _onItemTapped,
+          ),
         ),
-      ),
-      debugShowCheckedModeBanner: false,
+
+
     );
   }
 }

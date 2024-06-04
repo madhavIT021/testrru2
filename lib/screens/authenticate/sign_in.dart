@@ -10,10 +10,12 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:testrru/services/validator.dart';  // Import the email validator
 
 class SignIn extends StatefulWidget {
-  final Function toggleView;
+  // final Function toggleView;
   final String? role;
 
-  SignIn({required this.toggleView, required this.role});
+  // SignIn({required this.toggleView, required this.role});
+  SignIn({ required this.role});
+
 
   @override
   _SignInState createState() => _SignInState();
@@ -43,17 +45,17 @@ class _SignInState extends State<SignIn> {
           "Welcomeback",
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
-        actions: <Widget>[
-          TextButton.icon(
-            icon: Icon(Icons.person),
-            label: Text('Register'),
-            onPressed: () => widget.toggleView(),
-            style: ElevatedButton.styleFrom(
-              foregroundColor:
-              Colors.blue[100], // foreground (text) color
-            ),
-          ),
-        ],
+        // actions: <Widget>[
+        //   TextButton.icon(
+        //     icon: Icon(Icons.person),
+        //     label: Text('Register'),
+        //     onPressed: () => widget.toggleView(),
+        //     style: ElevatedButton.styleFrom(
+        //       foregroundColor:
+        //       Colors.blue[100], // foreground (text) color
+        //     ),
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         child: Container(

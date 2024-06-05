@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testrru/screens/student/attendance.dart';
+import 'package:testrru/screens/student/fees.dart';
+import 'package:testrru/screens/student/result.dart';
 import 'package:testrru/screens/student/timetable.dart';
 import 'package:testrru/shared/transition_animation.dart';
 
@@ -44,11 +47,41 @@ class _FadingContainerState extends State<FadingContainer> {
   bool _isClicked = false;
 
   void navigateToScreen(String? role) {
-    if (role == 'Time table') {
-      Navigator.push(
+    // if (role == 'Time table') {
+    //   Navigator.push(
+    //     context,
+    //     SlidePageRoute(page: Timetable()),
+    //   );
+    // }
+    switch(role){
+      case 'Timetable' : {
+    Navigator.push(
         context,
         SlidePageRoute(page: Timetable()),
       );
+      }
+      break;
+      case 'Attendance' : {
+        Navigator.push(
+          context,
+          SlidePageRoute(page: Attendance()),
+        );
+      }
+      break;
+      case 'Fees' : {
+        Navigator.push(
+          context,
+          SlidePageRoute(page: Fees()),
+        );
+      }
+      break;
+      case 'Result' : {
+        Navigator.push(
+          context,
+          SlidePageRoute(page: Result()),
+        );
+      }
+
     }
 
   }

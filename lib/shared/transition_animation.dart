@@ -28,7 +28,8 @@ class FadeRoute extends PageRouteBuilder {
 
 class CustomPageRoute extends PageRouteBuilder {
   final Widget page;
-  CustomPageRoute({required this.page})
+  final int millisecinds;
+  CustomPageRoute({required this.page,required this.millisecinds})
       : super(
     pageBuilder: (
         BuildContext context,
@@ -51,14 +52,14 @@ class CustomPageRoute extends PageRouteBuilder {
           ).animate(
             CurvedAnimation(
               parent: animation,
-              curve: Curves.elasticInOut,
+              curve: Curves.easeInOut,
             ),
           ),
           child: child,
         ),
       );
     },
-    transitionDuration: Duration(milliseconds: 700),
+    transitionDuration: Duration(milliseconds: millisecinds),
   );
 }
 
@@ -69,12 +70,14 @@ class SlidePageRoute extends PageRouteBuilder {
   final Offset begin;
   final Offset end;
   final Curve curve;
+  final int millisecinds;
 
   SlidePageRoute({
     required this.page,
     this.begin = const Offset(0.0, 1.0),
     this.end = Offset.zero,
     this.curve = Curves.easeInOut,
+    required this. millisecinds,
   }) : super(
     pageBuilder: (
         BuildContext context,
@@ -94,7 +97,7 @@ class SlidePageRoute extends PageRouteBuilder {
         child: child,
       );
     },
-    transitionDuration: Duration(milliseconds: 990),
+    transitionDuration: Duration(milliseconds: millisecinds),
   );
 }
 

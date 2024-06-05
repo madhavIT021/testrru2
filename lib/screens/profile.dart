@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: <Widget>[
             CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+              backgroundImage: AssetImage("assets/image.jpeg"),
             ),
             SizedBox(height: 16),
             Text(

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:testrru/screens/inbox_screen.dart';
 import 'package:testrru/screens/student/dashboard.dart';
 import 'package:testrru/screens/Faculty/faculty.dart';
 import 'package:testrru/screens/home/home.dart';
-import 'package:testrru/screens/home/profile.dart';
+import 'package:testrru/screens/profile.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,6 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   static final List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
     ProfilePage(),
+    Inbox(),
   ];
 
   void _onItemTapped(int index) {
@@ -42,6 +44,10 @@ class _MainScreenState extends State<MainScreen> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.emoji_emotions),
                 label: 'Profile',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.inbox_rounded),
+                label: 'Inbox',
               ),
 
             ],

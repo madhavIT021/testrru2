@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:testrru/screens/select_role.dart';
 import 'package:testrru/screens/student/dashboard.dart';
 import 'package:testrru/screens/student/main_screen.dart';
+import 'package:testrru/screens/student/timetable.dart';
 import 'services/auth.dart';
 import 'package:testrru/screens/wrapper.dart';
 import 'package:provider/provider.dart';

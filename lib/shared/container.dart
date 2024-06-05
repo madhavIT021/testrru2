@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testrru/screens/student/timetable.dart';
+import 'package:testrru/shared/transition_animation.dart';
 
 class CustomContainer extends StatelessWidget {
 
@@ -45,10 +48,11 @@ class _FadingContainerState extends State<FadingContainer> {
         });
       },
       child: AnimatedOpacity(
-        opacity: _isClicked ? 1.0 : 0.5,
+        opacity: _isClicked ? 1.0 : 0.8,
         duration: Duration(seconds: 1),
         child: Container(
           margin: EdgeInsets.all(8.0),
+          height: 150,
           decoration: BoxDecoration(
             color: Colors.lightBlue[100],
             border: Border.all(
@@ -56,14 +60,17 @@ class _FadingContainerState extends State<FadingContainer> {
               width: 2,
             ),
           ),
-          child: Center(
-            child: _isClicked
-                ? Text(
-              'Hello, Flutter!',
-              style: TextStyle(fontSize: 16),
-            )
-                : null,
+          child: TextButton(
+            onPressed: () => Navigator.push(context,
+            SlidePageRoute(page: Timetable())),
+            child: Center(
+              child:  Text(
+                'Timetable',
+                style: TextStyle(fontSize: 16),
+              )
+            ),
           ),
+
         ),
       ),
     );

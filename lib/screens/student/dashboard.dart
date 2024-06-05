@@ -34,9 +34,9 @@ class _DashboardState extends State<Dashboard> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                    child: CustomContainer(
-                  h: 150,
-                  container: "Time table",
+                    child: FadingContainer(
+                  // h: 150,
+                  // container: "Time table",
                 )),
                 SizedBox(
                   width: 10.0,

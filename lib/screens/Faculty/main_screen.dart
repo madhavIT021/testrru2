@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testrru/screens/student/dashboard.dart';
 import 'package:testrru/screens/Faculty/faculty.dart';
 import 'package:testrru/screens/home/home.dart';
-import 'package:testrru/screens/home/profile.dart';
+import 'package:testrru/screens/profile.dart';
 
 class MainScreenF extends StatefulWidget {
   const MainScreenF({super.key});

@@ -71,6 +71,7 @@ class _FadingContainerState extends State<FadingContainer> {
       case 'Fees' : {
         Navigator.push(
           context,
+
           CustomPageRoute(page: Fees(),millisecinds: 500),
         );
       }
@@ -79,6 +80,7 @@ class _FadingContainerState extends State<FadingContainer> {
         Navigator.push(
           context,
           CustomPageRoute(page: Result(),millisecinds: 500),
+
         );
       }
 

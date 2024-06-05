@@ -11,12 +11,7 @@ class Attendance extends StatefulWidget {
 class _AttendanceState extends State<Attendance> {
   final List<List<String>> tableData = [
     ["Course", "Lecture","Percentage"],
-    ["DAA", "15/35","42.85%"],
-    ["DBMS", "25/42","59.52%"],
   ];
-
-  late int? percentage = (102.37 / (tableData.length-1)).toInt();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

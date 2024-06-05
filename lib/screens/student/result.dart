@@ -11,9 +11,7 @@ class Result extends StatefulWidget {
 class _ResultState extends State<Result> {
   final List<List<String>> tableData = [
     ["Course", "Credit", "Grade"],
-    ["Design and Analysis of Algorithms ", "4.0", "AB"],
-    ["Database Management System ", "4.0", "BB"],
-  ];
+   ];
 
   String _selectedValue = 'Select';
   bool _isTableVisible = false;
@@ -24,6 +22,7 @@ class _ResultState extends State<Result> {
       body: Stack(
         children: <Widget>[
           Positioned(
+
             top: 35.0,
             right: 30.0,
             child:_isTableVisible ? SizedBox() : DropdownButton<String>(

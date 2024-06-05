@@ -5,8 +5,8 @@ import 'package:testrru/shared/transition_animation.dart';
 
 class CustomContainer extends StatelessWidget {
 
-  double? h;
-  String? container;
+  final double? h;
+  final String? container;
 
   CustomContainer({required this.h,required this.container});
 
@@ -32,12 +32,27 @@ class CustomContainer extends StatelessWidget {
 }
 
 class FadingContainer extends StatefulWidget {
+
+  late final String container;
+  final double? h;
+  FadingContainer({required this.h, required this.container});
   @override
   _FadingContainerState createState() => _FadingContainerState();
 }
 
 class _FadingContainerState extends State<FadingContainer> {
   bool _isClicked = false;
+
+  void navigateToScreen(String? role) {
+    if (role == 'Time table') {
+      Navigator.push(
+        context,
+        SlidePageRoute(page: Timetable()),
+      );
+    }
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +67,7 @@ class _FadingContainerState extends State<FadingContainer> {
         duration: Duration(seconds: 1),
         child: Container(
           margin: EdgeInsets.all(8.0),
-          height: 150,
+          height: widget.h,
           decoration: BoxDecoration(
             color: Colors.lightBlue[100],
             border: Border.all(
@@ -61,11 +76,10 @@ class _FadingContainerState extends State<FadingContainer> {
             ),
           ),
           child: TextButton(
-            onPressed: () => Navigator.push(context,
-            SlidePageRoute(page: Timetable())),
+            onPressed: () => navigateToScreen(widget.container),
             child: Center(
               child:  Text(
-                'Timetable',
+                widget.container,
                 style: TextStyle(fontSize: 16),
               )
             ),

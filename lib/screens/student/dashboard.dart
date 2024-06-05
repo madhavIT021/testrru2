@@ -15,7 +15,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:const  Text(
+        title: const Text(
           "Dashboard",
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
@@ -24,7 +24,6 @@ class _DashboardState extends State<Dashboard> {
           child: Image(image: AssetImage('assets/Logo copy.png')),
         ),
         centerTitle: true,
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -34,15 +33,12 @@ class _DashboardState extends State<Dashboard> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                    child: FadingContainer(
-                  // h: 150,
-                  // container: "Time table",
-                )),
+                    child: FadingContainer(h: 150, container: "Time table",)),
                 SizedBox(
                   width: 10.0,
                 ),
                 Expanded(
-                    child: CustomContainer(h: 150, container: "Attendance")),
+                    child: FadingContainer(h: 150, container: "Attendance")),
               ],
             ),
             SizedBox(height: 10), // Add spacing between rows
@@ -50,16 +46,10 @@ class _DashboardState extends State<Dashboard> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                    child: CustomContainer(
-                  h: 150,
-                  container: "Fee Payment",
-                )),
+                    child: FadingContainer(h: 150, container: "Fee Payment",)),
                 SizedBox(width: 10),
                 Expanded(
-                    child: CustomContainer(
-                  h: 150,
-                  container: "Result",
-                )),
+                    child: FadingContainer(h: 150, container: "Result",)),
               ],
             ),
           ],

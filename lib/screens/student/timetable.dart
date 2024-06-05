@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class Timetable extends StatelessWidget {
+class Timetable extends StatefulWidget {
   Timetable({super.key});
-  List<List<String>> tableData = [
+
+  @override
+  State<Timetable> createState() => _TimetableState();
+}
+
+class _TimetableState extends State<Timetable> {
+  final List<List<String>> tableData = [
     ["Time", "Subject", "Faculty"],
     ["9:10 AM - 11:10 AM", "DAA", "prof. ABC"],
     ["11:10 AM - 12:10 PM", "Lunch Break", "-"],
@@ -20,24 +26,30 @@ class Timetable extends StatelessWidget {
         children: <Widget>[
           const SizedBox(height: 30.0,),
           Padding(
-            padding: const EdgeInsets.all(40.0),
+            padding: const EdgeInsets.symmetric(vertical: 30.0,horizontal: 30.0),
             child: Table(
               border: TableBorder.all(color: Colors.black),
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              children: tableData.map((row) {
-                return TableRow(
+              children: tableData.asMap().map((index, row) {
+                return MapEntry(index, TableRow(
                   children: row.map((cell) {
                     return TableCell(
-                      child: Padding(
+
+                      child: Container(
+                        width: 500,
+                        color: index == 0 ? Colors.blue[200] : null,  // Apply background color to the header row
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           cell,
+                          style: TextStyle(
+                            fontWeight: index == 0 ? FontWeight.bold : FontWeight.normal,  // Bold text for header row
+                          ),
                         ),
                       ),
                     );
                   }).toList(),
-                );
-              }).toList(),
+                ));
+              }).values.toList(),
             ),
           ),
         ],

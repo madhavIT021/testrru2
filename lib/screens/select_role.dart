@@ -23,12 +23,12 @@ class _RoleState extends State<Role> {
     if (role == 'Guest') {
       Navigator.push(
         context,
-        SlidePageRoute(page: Home(),millisecinds: 990),
+        SlidePageRoute(page: Home(),millisecinds: 980),
       );
     } else {
       Navigator.push(
         context,
-        SlidePageRoute(page: Wrapper(role: role),millisecinds: 990),
+        SlidePageRoute(page: Wrapper(role: role),millisecinds: 980),
       );
     }
   }
@@ -58,7 +58,9 @@ class _RoleState extends State<Role> {
                     child: child,
                   ),
                 );
+
               },
+
               child: Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),

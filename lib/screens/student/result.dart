@@ -11,6 +11,8 @@ class Result extends StatefulWidget {
 class _ResultState extends State<Result> {
   final List<List<String>> tableData = [
     ["Course", "Credit", "Grade"],
+    ["Database Management System ", "4.0", "AB"],
+    ["Design and Analysis of Algorithms", "4.0", "BB"],
    ];
 
   String _selectedValue = 'Select';

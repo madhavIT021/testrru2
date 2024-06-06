@@ -14,9 +14,10 @@ class MainScreenF extends StatefulWidget {
 class _MainScreenFState extends State<MainScreenF> {
   int _selectedIndex = 0;
 
+
   static final List<Widget> _widgetOptions = <Widget>[
     Faculty(),
-    ProfilePage(),
+    ProfilePage(selected_role: "Faculty",),
   ];
 
   void _onItemTapped(int index) {
@@ -34,7 +35,7 @@ class _MainScreenFState extends State<MainScreenF> {
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.school),
+                icon: Icon(Icons.person_3_rounded),
                 label: 'Faculty',
               ),
 

@@ -1,25 +1,126 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:testrru/services/auth.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
+
+
+  final String? selected_role;
+  ProfilePage({super.key,required this.selected_role});
+
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  Widget build(BuildContext context) {
+   if(selected_role=='Student')
+      {
+        return ProfilePageS();
+      }
+   else
+     {
+       return ProfilePageF();
+     }
+
+  }
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class ProfilePageS extends StatefulWidget {
+  @override
+  _ProfilePageSState createState() => _ProfilePageSState();
+}
+
+class _ProfilePageSState extends State<ProfilePageS> {
   final _formKey = GlobalKey<FormState>();
   final Authservice _auth = Authservice();
+  final ImagePicker _picker = ImagePicker();
 
-  final TextEditingController _nameController = TextEditingController(text: 'Madhav');
-  final TextEditingController _emailController = TextEditingController(text: 'madhav.desai@example.com');
-  final TextEditingController _phoneController = TextEditingController(text: '8320760088');
-  final TextEditingController _addressController = TextEditingController(text: 'GH-3, Gandhinagar');
-  final TextEditingController _schoolController = TextEditingController(text: 'RRU');
-  final TextEditingController _degreeController = TextEditingController(text: 'Bachelor of Technology');
-  final TextEditingController _fieldOfStudyController = TextEditingController(text: 'Information Technology');
-  final TextEditingController _graduationYearController = TextEditingController(text: '2026');
+  final TextEditingController _nameController =
+      TextEditingController(text: 'Madhav');
+  final TextEditingController _emailController =
+      TextEditingController(text: 'madhav.desai@example.com');
+  final TextEditingController _phoneController =
+      TextEditingController(text: '8320760088');
+  final TextEditingController _addressController =
+      TextEditingController(text: 'GH-3, Gandhinagar');
+  final TextEditingController _schoolController =
+      TextEditingController(text: 'RRU');
+  final TextEditingController _degreeController =
+      TextEditingController(text: 'Bachelor of Technology');
+  final TextEditingController _fieldOfStudyController =
+      TextEditingController(text: 'Information Technology');
+  final TextEditingController _graduationYearController =
+      TextEditingController(text: '2026');
 
   bool _isEditable = false;
+  File? _profileImage;
+  String? _profileImageUrl;
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+      await _auth.uploadImage(_profileImage!);
+      // Assuming the uploadImage method in Authservice sets the _profileImageUrl correctly.
+      final downloadUrl = await _auth.uploadImage(_profileImage!);
+      setState(() {
+        _profileImageUrl = downloadUrl;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImageUrl();
+  }
+
+  Future<void> _loadProfileImageUrl() async {
+    final profileImageUrl = await _auth.fetchProfileImageUrl();
+    setState(() {
+      _profileImageUrl = profileImageUrl;
+    });
+  }
+
+  // void _showOptions() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return SafeArea(
+  //         child: Wrap(
+  //           children: <Widget>[
+  //             ListTile(
+  //               leading: Icon(Icons.photo_library),
+  //               title: Text('Upload Image'),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 _pickImage();
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(Icons.visibility),
+  //               title: Text('See Image'),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                     builder: (_) => ProfilePhotoView(
+  //                       photoTag: "profile_photo_tag",
+  //                       photoFile: _profileImage,
+  //                       photoUrl: _profileImageUrl,
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +137,48 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage("assets/image.jpeg"),
+            GestureDetector(
+              onTap: () {
+               Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ProfilePhotoView(
+                      photoTag: "profile_photo_tag",
+                      photoFile: _profileImage,
+                      photoUrl: _profileImageUrl,
+                    ),
+                  ),
+                );
+              },
+              child: Stack(
+                children: <Widget>[
+                  Hero(
+                    tag: "profile_photo_tag",
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _profileImageUrl != null
+                          ? NetworkImage(_profileImageUrl!)
+                          : _profileImage != null
+                              ? FileImage(_profileImage!)
+                              : AssetImage("assets/Logo copy.png")
+                                  as ImageProvider,
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                      bottom: 0,
+                      child: GestureDetector(
+                        onTap: (){
+                          _pickImage();
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: Colors.lightBlue,
+                          child: Icon(Icons.edit, color: Colors.white,),
+                        ),
+                      )
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             Text(
@@ -65,7 +205,9 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 children: <Widget>[
                   // Personal Information
-                  Text('Personal Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('Personal Information',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 16),
                   TextFormField(
                     controller: _nameController,
@@ -116,7 +258,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 32),
                   // Academic Information
-                  Text('Academic Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('Academic Information',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 16),
                   TextFormField(
                     controller: _schoolController,
@@ -156,23 +300,22 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 16),
                   TextFormField(
                     controller: _graduationYearController,
-                    decoration: InputDecoration(labelText: 'Year of Graduation'),
+                    decoration: InputDecoration(labelText: 'Graduation Year'),
                     enabled: _isEditable,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your year of graduation';
+                        return 'Please enter your graduation year';
                       }
                       return null;
                     },
                   ),
-                  SizedBox(height: 32),
                   TextButton.icon(
-                    onPressed: () async {
-                      await _auth.signOut();
+                    onPressed: () {
+                      _auth.signOut();
                     },
-                    label: const Text("logout"),
-                    icon: const Icon(Icons.person),
-                  ),
+                    label: Text('SignOut'),
+                    icon: Icon(Icons.logout),
+                  )
                 ],
               ),
             ),
@@ -182,3 +325,276 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
+class ProfilePhotoView extends StatelessWidget {
+  final String photoTag;
+  final File? photoFile;
+  final String? photoUrl;
+
+  ProfilePhotoView({required this.photoTag, this.photoFile, this.photoUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile Photo'),
+      ),
+      body: Center(
+        child: Hero(
+          tag: photoTag,
+          child: photoUrl != null
+              ? Image.network(photoUrl!)
+              : photoFile != null
+                  ? Image.file(photoFile!)
+                  : Image.asset("assets/Logo copy.png"),
+        ),
+      ),
+    );
+  }
+}
+
+
+class ProfilePageF extends StatefulWidget {
+  @override
+  _ProfilePageFState createState() => _ProfilePageFState();
+}
+
+class _ProfilePageFState extends State<ProfilePageF> {
+  final _formKey = GlobalKey<FormState>();
+  final Authservice _auth = Authservice();
+  final ImagePicker _picker = ImagePicker();
+
+  final TextEditingController _nameController =
+  TextEditingController(text: 'Madhav');
+  final TextEditingController _emailController =
+  TextEditingController(text: 'madhav.desai@example.com');
+  final TextEditingController _phoneController =
+  TextEditingController(text: '8320760088');
+  final TextEditingController _addressController =
+  TextEditingController(text: 'GH-3, Gandhinagar');
+
+
+  bool _isEditable = false;
+  File? _profileImage;
+  String? _profileImageUrl;
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+      await _auth.uploadImage(_profileImage!);
+      // Assuming the uploadImage method in Authservice sets the _profileImageUrl correctly.
+      final downloadUrl = await _auth.uploadImage(_profileImage!);
+      setState(() {
+        _profileImageUrl = downloadUrl;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImageUrl();
+  }
+
+  Future<void> _loadProfileImageUrl() async {
+    final profileImageUrl = await _auth.fetchProfileImageUrl();
+    setState(() {
+      _profileImageUrl = profileImageUrl;
+    });
+  }
+
+  // void _showOptions() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return SafeArea(
+  //         child: Wrap(
+  //           children: <Widget>[
+  //             ListTile(
+  //               leading: Icon(Icons.photo_library),
+  //               title: Text('Upload Image'),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 _pickImage();
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(Icons.visibility),
+  //               title: Text('See Image'),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                     builder: (_) => ProfilePhotoView(
+  //                       photoTag: "profile_photo_tag",
+  //                       photoFile: _profileImage,
+  //                       photoUrl: _profileImageUrl,
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+        centerTitle: true,
+        leading: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+          child: Image(image: AssetImage('assets/Logo copy.png')),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ProfilePhotoView(
+                      photoTag: "profile_photo_tag",
+                      photoFile: _profileImage,
+                      photoUrl: _profileImageUrl,
+                    ),
+                  ),
+                );
+              },
+              child: Stack(
+                children: <Widget>[
+                  Hero(
+                    tag: "profile_photo_tag",
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _profileImageUrl != null
+                          ? NetworkImage(_profileImageUrl!)
+                          : _profileImage != null
+                          ? FileImage(_profileImage!)
+                          : AssetImage("assets/Logo copy.png")
+                      as ImageProvider,
+                    ),
+                  ),
+                  Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: GestureDetector(
+                        onTap: (){
+                          _pickImage();
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: Colors.lightBlue,
+                          child: Icon(Icons.edit, color: Colors.white,),
+                        ),
+                      )
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 16),
+            Text(
+              _nameController.text,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+              _emailController.text,
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _isEditable = !_isEditable;
+                });
+              },
+              child: Text(_isEditable ? 'Save Profile' : 'Edit Profile'),
+            ),
+            SizedBox(height: 16),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  // Personal Information
+                  Text('Personal Information',
+                      style:
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(labelText: 'Name'),
+                    enabled: _isEditable,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(labelText: 'Email'),
+                    enabled: _isEditable,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _phoneController,
+                    decoration: InputDecoration(labelText: 'Phone Number'),
+                    enabled: _isEditable,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your phone number';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _addressController,
+                    decoration: InputDecoration(labelText: 'Address'),
+                    enabled: _isEditable,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your address';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 32),
+
+                  TextButton.icon(
+                    onPressed: () {
+                      _auth.signOut();
+                    },
+                    label: Text('SignOut'),
+                    icon: Icon(Icons.logout),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

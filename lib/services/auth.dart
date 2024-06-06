@@ -5,7 +5,9 @@ import 'package:testrru/services/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
 class Authservice {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -69,12 +71,41 @@ String? error;
     }
   }
 
-
-
-
-
   //signout
   Future signOut() async {
     return _auth.signOut();
   }
+
+  //Upload image to firebase_storage
+  Future<String?> uploadImage(File profileImage) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) return null;
+
+      final storageRef = FirebaseStorage.instance.ref().child('profile_images').child(user.uid);
+      final uploadTask = storageRef.putFile(profileImage);
+
+      final snapshot = await uploadTask.whenComplete(() {});
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'profileImageUrl': downloadUrl,
+      }, SetOptions(merge: true));
+
+      return downloadUrl;
+    } catch (e) {
+      print('Failed to upload image: $e');
+      return null;
+    }
+  }
+
+  // fetch the image from storage
+  Future<String?> fetchProfileImageUrl() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+
+    final docSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    return docSnapshot.data()?['profileImageUrl'] as String?;
+  }
+
 }

@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testrru/screens/student/attendance.dart';
 import 'package:testrru/screens/student/fees.dart';
 import 'package:testrru/screens/student/result.dart';
 import 'package:testrru/screens/student/timetable.dart';
 import 'package:testrru/shared/transition_animation.dart';
-
 class CustomContainer extends StatelessWidget {
 
   final double? h;
@@ -111,7 +109,7 @@ class _FadingContainerState extends State<FadingContainer> {
             ),
           ),
           child: TextButton(
-            onPressed: () => navigateToScreen(widget.container),
+            onPressed: ()  => navigateToScreen(widget.container),
             child: Center(
               child:  Text(
                 widget.container,

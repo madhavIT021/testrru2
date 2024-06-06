@@ -503,7 +503,7 @@ class _ProfilePageFState extends State<ProfilePageF> {
                 ],
               ),
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 16),
             Text(
               _nameController.text,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

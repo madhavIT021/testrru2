@@ -3,18 +3,21 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:testrru/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:testrru/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatelessWidget {
 
 
-  final String? selected_role;
+  final String selected_role;
   ProfilePage({super.key,required this.selected_role});
 
   @override
   Widget build(BuildContext context) {
    if(selected_role=='Student')
       {
-        return ProfilePageS();
+        return ProfilePageS(role: selected_role);
       }
    else
      {
@@ -25,6 +28,8 @@ class ProfilePage extends StatelessWidget {
 }
 
 class ProfilePageS extends StatefulWidget {
+ final String role ;
+  ProfilePageS({required this.role});
   @override
   _ProfilePageSState createState() => _ProfilePageSState();
 }
@@ -33,6 +38,7 @@ class _ProfilePageSState extends State<ProfilePageS> {
   final _formKey = GlobalKey<FormState>();
   final Authservice _auth = Authservice();
   final ImagePicker _picker = ImagePicker();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   final TextEditingController _nameController =
       TextEditingController(text: 'Madhav');
@@ -74,6 +80,24 @@ class _ProfilePageSState extends State<ProfilePageS> {
   void initState() {
     super.initState();
     _loadProfileImageUrl();
+  }
+
+  Future<void> _loadProfileData() async {
+    final User user = _firebaseAuth.currentUser!;
+    final DatabaseServices dbService = DatabaseServices(uid: user.uid);
+    final DocumentSnapshot userData = await dbService.getUserData(widget.role!);
+
+    setState(() {
+      _nameController.text = userData['name'];
+      _emailController.text = userData['email'];
+      _phoneController.text = userData['phone'];
+      _addressController.text = userData['address'];
+      _schoolController.text = userData['school'];
+      _degreeController.text = userData['degree'];
+      _fieldOfStudyController.text = userData['fieldOfStudy'];
+      _graduationYearController.text = userData['graduationYear'];
+
+    });
   }
 
   Future<void> _loadProfileImageUrl() async {
@@ -121,6 +145,31 @@ class _ProfilePageSState extends State<ProfilePageS> {
   //     },
   //   );
   // }
+  Future<void> _saveProfileData() async {
+    if (_formKey.currentState!.validate()) {
+      final User user = _firebaseAuth.currentUser!;
+      final DatabaseServices dbService = DatabaseServices(uid: user.uid);
+
+      final Map<String, dynamic> updatedData = {
+        'name': _nameController.text,
+        'S': _emailController.text,
+        'phone': _phoneController.text,
+        'address': _addressController.text,
+        'school': _schoolController.text,
+        'degree': _degreeController.text,
+        'fieldOfStudy': _fieldOfStudyController.text,
+        'graduationYear': _graduationYearController.text,
+      };
+
+      await dbService.updateUserData(widget.role, updatedData);
+
+      setState(() {
+        _isEditable = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile updated successfully')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,9 +242,13 @@ class _ProfilePageSState extends State<ProfilePageS> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  _isEditable = !_isEditable;
-                });
+                if (_isEditable) {
+                  _saveProfileData();
+                } else {
+                  setState(() {
+                    _isEditable = true;
+                  });
+                }
               },
               child: Text(_isEditable ? 'Save Profile' : 'Edit Profile'),
             ),

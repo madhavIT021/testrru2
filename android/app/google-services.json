@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "45608366690",
-    "project_id": "testrru2",
-    "storage_bucket": "testrru2.appspot.com"
+    "project_number": "154033199482",
+    "project_id": "testrru2-fd458",
+    "storage_bucket": "testrru2-fd458.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:45608366690:android:cdbec23bc1ad2c132d573b",
+        "mobilesdk_app_id": "1:154033199482:android:993035257e013e22a49ec3",
         "android_client_info": {
-          "package_name": "com.example.testrru2"
+          "package_name": "com.company.testrru2"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBtyM9npIQl3DgZxah278Ox9JuJ76diQDQ"
+          "current_key": "AIzaSyABmLpgxS_t3qr4WZLqBiVqNKAgxI_pun0"
         }
       ],
       "services": {

@@ -1,19 +1,34 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseServices {
   final String uid;
 
-  DatabaseServices({ required this.uid});
+  DatabaseServices({required this.uid});
 
-  //collection reference
-  final CollectionReference Collection = FirebaseFirestore.instance.collection("students");
+  // Firestore instance
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future updateUserData(String email) async {
-    return await Collection.doc(uid).set({
+  // Collections for students and faculty
+  final CollectionReference studentCollection = FirebaseFirestore.instance.collection("students");
+  final CollectionReference facultyCollection = FirebaseFirestore.instance.collection("faculty");
 
-      'email' : email,
-    });
+  Future<void> updateUserData( String role,Map<String,dynamic> data) async {
+    if (role == 'student') {
+      return await studentCollection.doc(uid).update(data);
+    } else if (role == 'faculty') {
+      return await facultyCollection.doc(uid).update(data);
+    }else {
+      throw Exception("Invalid role");
+    }
   }
+
+  Future<DocumentSnapshot> getUserData(String role) async {
+    if (role == 'student') {
+      return await studentCollection.doc(uid).get();
+    } else if (role == 'faculty') {
+      return await facultyCollection.doc(uid).get();
+    } else {
+      throw Exception("Invalid role");
+    }
   }
+}

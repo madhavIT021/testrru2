@@ -16,7 +16,6 @@ class Wrapper extends StatelessWidget {
 
 
     final user = Provider.of<Users?>(context);
-    String? selectedRole;
     print(user);
 
     if (user == null) {

@@ -100,9 +100,10 @@ class _SignInState extends State<SignIn> {
                       validator: (val) {
                         if (val == null || val.isEmpty) {
                           return 'Enter an email';
-                        } else if (!isValidEmail(val)) {
-                          return 'Enter a valid email address';
                         }
+                        // else if (!isValidEmail(val)) {
+                        //   return 'Enter a valid email address';
+                        // }
                         return null;
                       },
                       onChanged: (val) {

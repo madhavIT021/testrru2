@@ -13,9 +13,9 @@ class DatabaseServices {
   final CollectionReference facultyCollection = FirebaseFirestore.instance.collection("faculty");
 
   Future<void> updateUserData( String role,Map<String,dynamic> data) async {
-    if (role == 'student') {
+    if (role == 'Student') {
       return await studentCollection.doc(uid).update(data);
-    } else if (role == 'faculty') {
+    } else if (role == 'Faculty') {
       return await facultyCollection.doc(uid).update(data);
     }else {
       throw Exception("Invalid role");
@@ -23,9 +23,9 @@ class DatabaseServices {
   }
 
   Future<DocumentSnapshot> getUserData(String role) async {
-    if (role == 'student') {
+    if (role == 'Student') {
       return await studentCollection.doc(uid).get();
-    } else if (role == 'faculty') {
+    } else if (role == 'Faculty') {
       return await facultyCollection.doc(uid).get();
     } else {
       throw Exception("Invalid role");

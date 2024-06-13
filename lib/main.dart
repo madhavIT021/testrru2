@@ -18,7 +18,7 @@ void main() async{
         projectId: "testrru2-fd458",
         storageBucket: "testrru2-fd458.appspot.com",
 
-      )
+      ),
   );
   // debugStorageBucket();
   runApp(const MyApp());

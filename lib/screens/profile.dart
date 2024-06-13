@@ -56,6 +56,8 @@ class _ProfilePageSState extends State<ProfilePageS> {
       TextEditingController(text: 'Information Technology');
   final TextEditingController _graduationYearController =
       TextEditingController(text: '2026');
+  final TextEditingController _admissionYearController =
+  TextEditingController(text: '2024');
 
   bool _isEditable = false;
   File? _profileImage;
@@ -80,12 +82,13 @@ class _ProfilePageSState extends State<ProfilePageS> {
   void initState() {
     super.initState();
     _loadProfileImageUrl();
+    _loadProfileData();
   }
 
   Future<void> _loadProfileData() async {
     final User user = _firebaseAuth.currentUser!;
     final DatabaseServices dbService = DatabaseServices(uid: user.uid);
-    final DocumentSnapshot userData = await dbService.getUserData(widget.role!);
+    final DocumentSnapshot userData = await dbService.getUserData(widget.role);
 
     setState(() {
       _nameController.text = userData['name'];
@@ -96,6 +99,7 @@ class _ProfilePageSState extends State<ProfilePageS> {
       _degreeController.text = userData['degree'];
       _fieldOfStudyController.text = userData['fieldOfStudy'];
       _graduationYearController.text = userData['graduationYear'];
+      _admissionYearController.text = userData['yearOfAdmission'];
 
     });
   }
@@ -152,13 +156,14 @@ class _ProfilePageSState extends State<ProfilePageS> {
 
       final Map<String, dynamic> updatedData = {
         'name': _nameController.text,
-        'S': _emailController.text,
+        'email': _emailController.text,
         'phone': _phoneController.text,
         'address': _addressController.text,
         'school': _schoolController.text,
         'degree': _degreeController.text,
         'fieldOfStudy': _fieldOfStudyController.text,
         'graduationYear': _graduationYearController.text,
+        'yearOfAdmission': _admissionYearController.text,
       };
 
       await dbService.updateUserData(widget.role, updatedData);
@@ -351,17 +356,39 @@ class _ProfilePageSState extends State<ProfilePageS> {
                     },
                   ),
                   SizedBox(height: 16),
-                  TextFormField(
-                    controller: _graduationYearController,
-                    decoration: InputDecoration(labelText: 'Graduation Year'),
-                    enabled: _isEditable,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your graduation year';
-                      }
-                      return null;
-                    },
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _graduationYearController,
+                          decoration: InputDecoration(labelText: 'Graduation Year'),
+                          enabled: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your graduation year';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _admissionYearController,
+                          decoration: InputDecoration(labelText: 'Admission Year'), // New field
+                          enabled: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your admission year';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ],
                   ),
+
                   TextButton.icon(
                     onPressed: () {
                       _auth.signOut();

@@ -21,6 +21,7 @@ class Wrapper extends StatelessWidget {
     if (user == null) {
       return Authenticate(
         role: role,
+
       );
     } else if (role == 'Student') {
       return MainScreen();

@@ -16,20 +16,20 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   if(selected_role=='Student')
-      {
-        return ProfilePageS(role: selected_role);
-      }
-   else
-     {
-       return ProfilePageF(role: selected_role);
-     }
+    if(selected_role=='Student')
+    {
+      return ProfilePageS(role: selected_role);
+    }
+    else
+    {
+      return ProfilePageF(role: selected_role);
+    }
 
   }
 }
 
 class ProfilePageS extends StatefulWidget {
- final String role ;
+  final String role ;
   ProfilePageS({required this.role});
   @override
   _ProfilePageSState createState() => _ProfilePageSState();
@@ -44,21 +44,21 @@ class _ProfilePageSState extends State<ProfilePageS> {
 
 
   final TextEditingController _nameController =
-      TextEditingController(text: 'Madhav');
+  TextEditingController(text: 'Madhav');
   final TextEditingController _emailController =
-      TextEditingController(text: 'madhav.desai@example.com');
+  TextEditingController(text: 'madhav.desai@example.com');
   final TextEditingController _phoneController =
-      TextEditingController(text: '8320760088');
+  TextEditingController(text: '8320760088');
   final TextEditingController _addressController =
-      TextEditingController(text: 'GH-3, Gandhinagar');
+  TextEditingController(text: 'GH-3, Gandhinagar');
   final TextEditingController _schoolController =
-      TextEditingController(text: 'RRU');
+  TextEditingController(text: 'RRU');
   final TextEditingController _degreeController =
-      TextEditingController(text: 'Bachelor of Technology');
+  TextEditingController(text: 'Bachelor of Technology');
   final TextEditingController _fieldOfStudyController =
-      TextEditingController(text: 'Information Technology');
+  TextEditingController(text: 'Information Technology');
   final TextEditingController _graduationYearController =
-      TextEditingController(text: '2026');
+  TextEditingController(text: '2026');
   final TextEditingController _admissionYearController =
   TextEditingController(text: '2024');
 
@@ -196,7 +196,7 @@ class _ProfilePageSState extends State<ProfilePageS> {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-               Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => ProfilePhotoView(
@@ -216,13 +216,13 @@ class _ProfilePageSState extends State<ProfilePageS> {
                       backgroundImage: _profileImageUrl != null
                           ? NetworkImage(_profileImageUrl!)
                           : _profileImage != null
-                              ? FileImage(_profileImage!)
-                              : AssetImage("assets/Logo copy.png")
-                                  as ImageProvider,
+                          ? FileImage(_profileImage!)
+                          : AssetImage("assets/Logo copy.png")
+                      as ImageProvider,
                     ),
                   ),
                   Positioned(
-                    right: 0,
+                      right: 0,
                       bottom: 0,
                       child: GestureDetector(
                         onTap: (){
@@ -268,7 +268,7 @@ class _ProfilePageSState extends State<ProfilePageS> {
                   // Personal Information
                   Text('Personal Information',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 16),
                   TextFormField(
                     controller: _nameController,
@@ -321,7 +321,7 @@ class _ProfilePageSState extends State<ProfilePageS> {
                   // Academic Information
                   Text('Academic Information',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 16),
                   TextFormField(
                     controller: _schoolController,
@@ -429,8 +429,8 @@ class ProfilePhotoView extends StatelessWidget {
           child: photoUrl != null
               ? Image.network(photoUrl!)
               : photoFile != null
-                  ? Image.file(photoFile!)
-                  : Image.asset("assets/Logo copy.png"),
+              ? Image.file(photoFile!)
+              : Image.asset("assets/Logo copy.png"),
         ),
       ),
     );
@@ -438,7 +438,7 @@ class ProfilePhotoView extends StatelessWidget {
 }
 
 
-        /// Profile class for faculty ///
+/// Profile class for faculty ///
 
 
 class ProfilePageF extends StatefulWidget {
@@ -837,4 +837,3 @@ class _ProfilePageFState extends State<ProfilePageF> {
     );
   }
 }
-

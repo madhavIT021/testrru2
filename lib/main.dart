@@ -11,14 +11,14 @@ import 'models/user.dart';
 void main() async{
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: "AIzaSyABmLpgxS_t3qr4WZLqBiVqNKAgxI_pun0",
-        appId: "1:154033199482:android:993035257e013e22a49ec3",
-        messagingSenderId: "154033199482",
-        projectId: "testrru2-fd458",
-        storageBucket: "testrru2-fd458.appspot.com",
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyABmLpgxS_t3qr4WZLqBiVqNKAgxI_pun0",
+      appId: "1:154033199482:android:993035257e013e22a49ec3",
+      messagingSenderId: "154033199482",
+      projectId: "testrru2-fd458",
+      storageBucket: "testrru2-fd458.appspot.com",
 
-      ),
+    ),
   );
   // debugStorageBucket();
   runApp(const MyApp());
@@ -50,4 +50,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

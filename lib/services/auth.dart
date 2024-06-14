@@ -80,7 +80,8 @@ String? error;
 
       final timestamp = DateTime.now().microsecondsSinceEpoch;
       final filename = profileImage.path.split("/").last;
-      final storageRef = FirebaseStorage.instance.ref().child('$user.uid/profile_images/timestamp-profileImage').child(user.uid);
+      final userID = user.uid;
+      final storageRef = FirebaseStorage.instance.ref().child('$userID/profile_images/$timestamp-$filename');
       final uploadTask = storageRef.putFile(profileImage);
 
       final snapshot = await uploadTask.whenComplete(() {});
@@ -90,7 +91,7 @@ String? error;
         'profileImageUrl': downloadUrl,
       }, SetOptions(merge: true));
 
-      return downloadUrl;
+      return fetchProfileImageUrl();
     } catch (e) {
       print('Failed to upload image: $e');
       return null;

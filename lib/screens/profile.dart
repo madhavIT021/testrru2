@@ -481,11 +481,8 @@ class _ProfilePageFState extends State<ProfilePageF> {
         _profileImage = File(pickedFile.path);
       });
       await _auth.uploadImage(_profileImage!);
-      // Assuming the uploadImage method in Authservice sets the _profileImageUrl correctly.
-      final downloadUrl = await _auth.uploadImage(_profileImage!);
-      setState(() {
-        _profileImageUrl = downloadUrl;
-      });
+      await _loadProfileImageUrl();
+
     }
   }
 

@@ -45,7 +45,6 @@ class Authservice {
 
       //creat a new document for the user with uid
       // await DatabaseServices(uid : user!.uid).updateUserData('${user.email}' );
-
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -56,10 +55,6 @@ String? error;
   //sign in using email and password
   Future signInWithEmailandPassword(String email, String password) async {
     try {
-      if (!email.endsWith('@rru.ac.in')) {
-        throw error = 'Invalid email or Password';
-      }
-
 
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
@@ -83,7 +78,9 @@ String? error;
       final user = _auth.currentUser;
       if (user == null) return null;
 
-      final storageRef = FirebaseStorage.instance.ref().child('profile_images').child(user.uid);
+      final timestamp = DateTime.now().microsecondsSinceEpoch;
+      final filename = profileImage.path.split("/").last;
+      final storageRef = FirebaseStorage.instance.ref().child('$user.uid/profile_images/timestamp-profileImage').child(user.uid);
       final uploadTask = storageRef.putFile(profileImage);
 
       final snapshot = await uploadTask.whenComplete(() {});

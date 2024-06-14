@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:testrru/models/exp_facultydata.dart';
 import 'dart:io';
 import 'package:testrru/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +22,7 @@ class ProfilePage extends StatelessWidget {
       }
    else
      {
-       return ProfilePageF();
+       return ProfilePageF(role: selected_role);
      }
 
   }
@@ -39,6 +40,8 @@ class _ProfilePageSState extends State<ProfilePageS> {
   final Authservice _auth = Authservice();
   final ImagePicker _picker = ImagePicker();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+
 
   final TextEditingController _nameController =
       TextEditingController(text: 'Madhav');
@@ -389,6 +392,7 @@ class _ProfilePageSState extends State<ProfilePageS> {
                     ],
                   ),
 
+
                   TextButton.icon(
                     onPressed: () {
                       _auth.signOut();
@@ -434,7 +438,12 @@ class ProfilePhotoView extends StatelessWidget {
 }
 
 
+        /// Profile class for faculty ///
+
+
 class ProfilePageF extends StatefulWidget {
+  final String role ;
+  ProfilePageF({required this.role});
   @override
   _ProfilePageFState createState() => _ProfilePageFState();
 }
@@ -443,6 +452,11 @@ class _ProfilePageFState extends State<ProfilePageF> {
   final _formKey = GlobalKey<FormState>();
   final Authservice _auth = Authservice();
   final ImagePicker _picker = ImagePicker();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  List<EmploymentInfo> _employmentList = [
+    EmploymentInfo(
+        company: '', position: '', startMonthYear: '', endMonthYear: '')
+  ];
 
   final TextEditingController _nameController =
   TextEditingController(text: 'Madhav');
@@ -457,6 +471,8 @@ class _ProfilePageFState extends State<ProfilePageF> {
   bool _isEditable = false;
   File? _profileImage;
   String? _profileImageUrl;
+  String? _gender;
+  String? _maritalStatus;
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -477,6 +493,29 @@ class _ProfilePageFState extends State<ProfilePageF> {
   void initState() {
     super.initState();
     _loadProfileImageUrl();
+    _loadProfileData();
+  }
+  Future<void> _loadProfileData() async {
+    final User user = _firebaseAuth.currentUser!;
+    final DatabaseServices dbService = DatabaseServices(uid: user.uid);
+    final DocumentSnapshot userData = await dbService.getUserData(widget.role);
+
+    setState(() {
+      _nameController.text = userData['name'];
+      _emailController.text = userData['email'];
+      _phoneController.text = userData['phone'];
+      _addressController.text = userData['address'];
+      _employmentList = (userData['employmentInfo'] as List<dynamic>).map((item) {
+        return EmploymentInfo(
+          company: item['company'],
+          position: item['position'],
+          startMonthYear: item['startMonthYear'],
+          endMonthYear: item['endMonthYear'],
+        );
+      }).toList();
+      _maritalStatus = userData['maritalStatus'];
+      _gender = userData['gender'];
+    });
   }
 
   Future<void> _loadProfileImageUrl() async {
@@ -485,6 +524,7 @@ class _ProfilePageFState extends State<ProfilePageF> {
       _profileImageUrl = profileImageUrl;
     });
   }
+
 
   // void _showOptions() {
   //   showModalBottomSheet(
@@ -636,6 +676,33 @@ class _ProfilePageFState extends State<ProfilePageF> {
                     },
                   ),
                   SizedBox(height: 16),
+
+                  //gender and marital status
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: TextEditingController(
+                            text: _gender,
+                          ),
+                          decoration: InputDecoration(labelText: 'Gender'),
+                          enabled: false,
+                        ),
+                      ),
+                      SizedBox(width: 16,),
+                      Expanded(
+                        child: TextFormField(
+                          controller: TextEditingController(
+                            text: _maritalStatus,
+                          ),
+                          decoration: InputDecoration(labelText: 'Marital Status'),
+                          enabled: false,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+
                   TextFormField(
                     controller: _phoneController,
                     decoration: InputDecoration(labelText: 'Phone Number'),
@@ -659,7 +726,101 @@ class _ProfilePageFState extends State<ProfilePageF> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 32),
+                  SizedBox(height: 16.0),
+
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: Text(
+                      'Previous Employment Information',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+
+                  // Table Rows
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        // Add Row Button
+                        for (int i = 0; i < _employmentList.length; i++)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          enabled: false,
+                                          controller: TextEditingController(
+                                              text: _employmentList[i].company),
+                                          decoration: InputDecoration(labelText: 'Company'),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.0),
+                                      Expanded(
+                                        child: TextFormField(
+                                          enabled: false,
+                                          controller: TextEditingController(
+                                              text: _employmentList[i].position),
+                                          decoration: InputDecoration(labelText: 'Position'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 8.0),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          controller: TextEditingController(
+                                              text: _employmentList[i].startMonthYear),
+                                          readOnly: true,
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                            labelText: 'Start Month-Year',
+                                          ),
+
+                                        ),
+                                      ),
+                                      SizedBox(width: 16.0),
+                                      Expanded(
+                                        child: TextFormField(
+                                          controller: TextEditingController(
+                                              text: _employmentList[i].endMonthYear),
+                                          readOnly: true,
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                            labelText: 'End Month-Year',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
 
                   TextButton.icon(
                     onPressed: () {
@@ -671,6 +832,8 @@ class _ProfilePageFState extends State<ProfilePageF> {
                 ],
               ),
             ),
+            // table here
+
           ],
         ),
       ),

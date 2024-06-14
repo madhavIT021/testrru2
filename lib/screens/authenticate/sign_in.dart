@@ -139,6 +139,7 @@ class _SignInState extends State<SignIn> {
                           });
                           try {
                             dynamic result = await _auth.signInWithEmailandPassword(email, password);
+                            print(result);
                             if (result == null) {
                               setState(() {
                                 error = 'Could not sign in with those credentials';
@@ -147,7 +148,7 @@ class _SignInState extends State<SignIn> {
                             }
                           } catch (e) {
                             setState(() {
-                              error = 'An error occurred. Please try again.';
+                              error = 'Invalid Email or Password';
                               loading = false;
                             });
                           }

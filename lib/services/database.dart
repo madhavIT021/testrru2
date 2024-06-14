@@ -31,4 +31,20 @@ class DatabaseServices {
       throw Exception("Invalid role");
     }
   }
+
+  Future<List<Map<String, dynamic>>> fetchFacultyData() async {
+    List<Map<String, dynamic>> facultyData = [];
+
+    try {
+      QuerySnapshot querySnapshot = await facultyCollection.get();
+      querySnapshot.docs.forEach((doc) {
+        facultyData.add(doc.data() as Map<String, dynamic>);
+      });
+      return facultyData;
+    } catch (e) {
+      print("Error fetching faculty data: $e");
+      return [];
+    }
+  }
+
 }

@@ -43,6 +43,7 @@ class _ProfilePageSState extends State<ProfilePageS> {
 
 
 
+
   final TextEditingController _nameController =
   TextEditingController(text: 'Madhav');
   final TextEditingController _emailController =
@@ -72,12 +73,12 @@ class _ProfilePageSState extends State<ProfilePageS> {
       setState(() {
         _profileImage = File(pickedFile.path);
       });
-      await _auth.uploadImage(_profileImage!);
+      _profileImageUrl = await _auth.uploadImage(_profileImage!,widget.role);
       // Assuming the uploadImage method in Authservice sets the _profileImageUrl correctly.
-      final downloadUrl = await _auth.uploadImage(_profileImage!);
-      setState(() {
-        _profileImageUrl = downloadUrl;
-      });
+      // final downloadUrl = await _auth.uploadImage(_profileImage!);
+      // setState(() {
+      //   _profileImageUrl = downloadUrl;
+      // });
     }
   }
 
@@ -251,7 +252,7 @@ class _ProfilePageSState extends State<ProfilePageS> {
             ElevatedButton(
               onPressed: () {
                 if (_isEditable) {
-                  _saveProfileData();
+                 _saveProfileData();
                 } else {
                   setState(() {
                     _isEditable = true;
@@ -562,6 +563,45 @@ class _ProfilePageFState extends State<ProfilePageF> {
   //   );
   // }
 
+  Future<void> _saveProfileData() async {
+    if (_formKey.currentState!.validate()) {
+      final User user = _firebaseAuth.currentUser!;
+      final DatabaseServices dbService = DatabaseServices(uid: user.uid);
+
+      final Map<String, dynamic> updatedData = {
+        'name': _nameController.text,
+        'email': _emailController.text,
+        'phone': _phoneController.text,
+        'address': _addressController.text,
+        'employmentInfo': _employmentList
+            .map((e) => {
+          'company': e.company,
+          'position': e.position,
+          'startMonthYear': e.startMonthYear,
+          'endMonthYear': e.endMonthYear,
+        })
+            .toList(),
+        'maritalStatus': _maritalStatus,
+        'gender': _gender,
+      };
+
+      try {
+        await dbService.updateUserData(widget.role, updatedData);
+
+        setState(() {
+          _isEditable = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Profile updated successfully')));
+      } catch (e) {
+        print('Error updating profile: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to update profile')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -633,9 +673,13 @@ class _ProfilePageFState extends State<ProfilePageF> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  _isEditable = !_isEditable;
-                });
+                if (_isEditable) {
+                  _saveProfileData();
+                } else {
+                  setState(() {
+                    _isEditable = true;
+                  });
+                }
               },
               child: Text(_isEditable ? 'Save Profile' : 'Edit Profile'),
             ),

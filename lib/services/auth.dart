@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 class Authservice {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final CollectionReference studentImageCollection = FirebaseFirestore.instance.collection("students-images");
+  final CollectionReference facultyImageCollection = FirebaseFirestore.instance.collection("students-images");
 
   //creat user object based on firebaseUser(User)
   Users? _userFromFirebaseUser(User? user) {
@@ -73,7 +75,7 @@ class Authservice {
   }
 
   //Upload image to firebase_storage
-  Future<String?> uploadImage(File profileImage) async {
+  Future<String?> uploadImage(File profileImage,String role) async {
     try {
       final user = _auth.currentUser;
       if (user == null) return null;
@@ -81,15 +83,25 @@ class Authservice {
       final timestamp = DateTime.now().microsecondsSinceEpoch;
       final filename = profileImage.path.split("/").last;
       final userID = user.uid;
-      final storageRef = FirebaseStorage.instance.ref().child('$userID/profile_images/$timestamp-$filename');
+      final storageRef = FirebaseStorage.instance.ref().child('$role-profileImages/$userID/$timestamp-$filename');
       final uploadTask = storageRef.putFile(profileImage);
 
       final snapshot = await uploadTask.whenComplete(() {});
       final downloadUrl = await snapshot.ref.getDownloadURL();
 
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-        'profileImageUrl': downloadUrl,
-      }, SetOptions(merge: true));
+      if(role == "Student")
+        {
+          await studentImageCollection.doc(user.uid).set({
+            'profileImageUrl': downloadUrl,
+          },
+              SetOptions(merge: true));
+        }
+      else{
+        await facultyImageCollection.doc(user.uid).set({
+          'profileImageUrl': downloadUrl,
+        },
+            SetOptions(merge: true));
+      }
 
       return fetchProfileImageUrl();
     } catch (e) {
@@ -106,5 +118,7 @@ class Authservice {
     final docSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
     return docSnapshot.data()?['profileImageUrl'] as String?;
   }
+
+
 
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testrru/screens/inbox_screen.dart';
 import 'package:testrru/screens/student/dashboard.dart';
-import 'package:testrru/screens/Faculty/faculty.dart';
-import 'package:testrru/screens/home/home.dart';
 import 'package:testrru/screens/profile.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,7 +12,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-
+  DateTime prv_backpress = DateTime.now();
 
   static final List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
@@ -26,6 +24,20 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+  Future<bool> _onPop() async {
+    final timeGap = DateTime.now().difference(prv_backpress);
+    final canExit = timeGap >= Duration(seconds: 2);
+print(timeGap);
+    if (!canExit) {
+      return true; // Exit the app
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Press back again to exit the app')),
+      );
+      prv_backpress = DateTime.now();
+      return false; // Do not exit the app
+    }
   }
 
   @override

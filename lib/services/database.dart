@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:testrru/models/event.dart';
+
+
 
 class DatabaseServices {
   final String uid;
@@ -6,11 +9,14 @@ class DatabaseServices {
   DatabaseServices({required this.uid});
 
   // Firestore instance
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+
+
 
   // Collections for students and faculty
   final CollectionReference studentCollection = FirebaseFirestore.instance.collection("students");
   final CollectionReference facultyCollection = FirebaseFirestore.instance.collection("faculty");
+  final CollectionReference eventCollection = FirebaseFirestore.instance.collection("events");
 
   Future<void> updateUserData( String role,Map<String,dynamic> data) async {
     if (role == 'Student') {
@@ -32,6 +38,19 @@ class DatabaseServices {
     }
   }
 
+  Future<List<EventPost>> getEventData() async {
+    QuerySnapshot snapshot = await eventCollection.get();
+    return snapshot.docs.map((doc) {
+      return EventPost(
+        title: doc['title'] ?? '',
+        description: doc['description'] ?? '',
+        date: doc['date'] ?? '',
+        location: doc['location'] ?? '',
+        imageUrls: List<String>.from(doc['imageurl'] ?? []),
+      );
+    }).toList();
+  }
+
   Future<List<Map<String, dynamic>>> fetchFacultyData() async {
     List<Map<String, dynamic>> facultyData = [];
 
@@ -46,6 +65,7 @@ class DatabaseServices {
       return [];
     }
   }
+
 
 
 

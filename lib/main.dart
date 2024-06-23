@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:testrru/screens/home/home.dart';
 import 'package:testrru/screens/profile.dart';
 import 'package:testrru/screens/select_role.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyApp> {
 
         debugShowCheckedModeBanner: false,
 
-        home: Role(),
+        home: Home(),
       ),
     );
   }

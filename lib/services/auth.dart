@@ -1,13 +1,15 @@
 
 import 'dart:async';
+
 import 'package:testrru/models/user.dart';
-import 'package:testrru/services/database.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
+
+
 class Authservice {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference studentImageCollection = FirebaseFirestore.instance.collection("students-images");
@@ -118,6 +120,8 @@ class Authservice {
     final docSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
     return docSnapshot.data()?['profileImageUrl'] as String?;
   }
+
+  final String apiKey = 'ef460d516ecf4dbbbdd07415a3525bf3';
 
 
 

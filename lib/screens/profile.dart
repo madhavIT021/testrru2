@@ -481,7 +481,7 @@ class _ProfilePageFState extends State<ProfilePageF> {
       setState(() {
         _profileImage = File(pickedFile.path);
       });
-      await _auth.uploadImage(_profileImage!);
+      await _auth.uploadImage(_profileImage!,widget.role);
       await _loadProfileImageUrl();
 
     }

@@ -95,7 +95,7 @@ class _ProfilePageSState extends State<ProfilePageS> {
     final DocumentSnapshot userData = await dbService.getUserData(widget.role);
 
     setState(() {
-      _nameController.text = userData['name'];
+      _nameController.text = userData['firstname'];
       _emailController.text = userData['email'];
       _phoneController.text = userData['phone'];
       _addressController.text = userData['address'];

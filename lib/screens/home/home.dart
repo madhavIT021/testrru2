@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testrru/models/event.dart';
+import 'package:testrru/screens/authenticate/authenticate.dart';
+import 'package:testrru/screens/guest/register_guest.dart';
 import 'package:testrru/services/database.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_expandable_text/flutter_expandable_text.dart';
@@ -27,6 +29,12 @@ class _HomeState extends State<Home> {
       _isLoading = false;
     });
   }
+  bool showSignIn = true;
+  void toogleView() {
+    setState(() {
+      showSignIn = !showSignIn;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +47,25 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
           child: Image(image: AssetImage('assets/Logo copy.png')),
         ),
+        actions: [
+          Tooltip(
+            message: 'Notifications',
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Authenticate(role: "Guest"),
+                    ),
+                  );
+                },
+                child: Icon(Icons.notifications_active),
+              ),
+            ),
+          ),
+        ],
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -74,9 +101,8 @@ class _HomeState extends State<Home> {
 
             // Title section with expandable description
             ListTile(
-              // Leading space for icon alignment like Instagram's share icon
               leading: Container(
-                width: 24.0, // Adjust width as needed
+                width: 24.0,
                 child: null,
               ),
               title: Column(
@@ -98,17 +124,24 @@ class _HomeState extends State<Home> {
                         overflow: TextOverflow.visible,
                       ),
                     ),
-                    trailing: Icon(Icons.notifications_active),
+
                   ),
                   SizedBox(height: 8.0),
-                  ExpandableText(
-                    post.description,
-                    readMoreText: 'read more',
-                    readLessText: 'show less',
-
-                    trim: 2,
-                    linkTextStyle: TextStyle(color: Colors.blue),
-                    style: TextStyle(fontSize: 16.0,color: Colors.black26),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EventPage(post: post),
+                        ),
+                      );
+                    },
+                    child: ExpandableText(
+                      post.description,
+                      trim: 2,
+                      linkTextStyle: TextStyle(color: Colors.blue),
+                      style: TextStyle(fontSize: 16.0, color: Colors.black),
+                    ),
                   ),
                 ],
               ),
@@ -118,5 +151,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
 }
 

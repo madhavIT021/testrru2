@@ -1,26 +1,23 @@
+import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:testrru/services/auth.dart';
 import 'package:testrru/shared/constants.dart';
 import 'package:testrru/shared/loading.dart';
-import 'package:flutter/material.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:testrru/services/validator.dart';
 
-class Register extends StatefulWidget {
-  final Function toogleView;
+class Registern extends StatefulWidget {
+  final Function toggleView;
   final String? role;
 
-  Register({required this.toogleView,required this.role});
-
-
+  Registern({required this.toggleView, required this.role});
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<Registern> createState() => _RegisternState();
 }
 
-class _RegisterState extends State<Register> {
-
+class _RegisternState extends State<Registern> {
   final Authservice _auth = Authservice();
-  final _formkey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   bool loading = false;
 
   String email = "";
@@ -30,33 +27,25 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? Loading() : Scaffold(
+    return loading
+        ? Loading()
+        : Scaffold(
       backgroundColor: Colors.blue[100],
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         elevation: 0.0,
-        title: const Text("Welcome to RRU",
+        title: const Text(
+          "Welcome to RRU",
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
-        actions: <Widget>[
-          TextButton.icon(
-            icon: Icon(Icons.person),
-            label: Text("Sign in"),
-            onPressed: () {
-              widget.toogleView();
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.blue[100], // foreground (text) color
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
           child: Column(
             children: [
-              const Padding(padding: EdgeInsets.all(0.0),
+              const Padding(
+                padding: EdgeInsets.all(0.0),
                 child: Center(
                   child: Image(
                     image: AssetImage('assets/Logo copy.png'),
@@ -84,7 +73,7 @@ class _RegisterState extends State<Register> {
               ),
               SizedBox(height: 20.0),
               Form(
-                key: _formkey,
+                key: _formKey,
                 child: Column(
                   children: <Widget>[
                     TextFormField(
@@ -108,14 +97,11 @@ class _RegisterState extends State<Register> {
                       decoration: textDecoretion.copyWith(hintText: 'Password'),
                       obscureText: true,
                       validator: (val) {
-                        if(val==null)
-                          {
-                            return "Enter valid  Password";
-                          }
-                        else if(!isValidPassword(val))
-                          {
-                            return 'Enter valid password';
-                          }
+                        if (val == null || val.isEmpty) {
+                          return 'Enter a password';
+                        } else if (!isValidPassword(val)) {
+                          return 'Enter a valid password';
+                        }
                         return null;
                       },
                       onChanged: (val) {
@@ -131,17 +117,15 @@ class _RegisterState extends State<Register> {
                         backgroundColor: Colors.blue[400], // background color
                       ),
                       onPressed: () async {
-                        if(_formkey.currentState!.validate())
-                        {
+                        if (_formKey.currentState!.validate()) {
                           setState(() {
                             loading = true;
                           });
                           dynamic result = await _auth.registerWithEmailandPassword(email, password);
-                          if(result==null)
-                          {
+                          if (result == null) {
                             setState(() {
                               error = "Enter a valid email or password";
-                              // loading = true;
+                              loading = false;
                             });
                           }
                         }
@@ -151,19 +135,38 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
 
+                    // "Already registered?" section
+                    TextButton.icon(
+                      icon: Icon(Icons.person),
+                      label: Text("Already registered? Sign in"),
+                      onPressed: () {
+                        widget.toggleView();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.red, // background color
+
+                      ),
+                    ),
                     SizedBox(height: 20.0),
                     Text(
                       error,
-                      style: const TextStyle(color: Colors.red,fontSize: 15.0),
+                      style: const TextStyle(color: Colors.red, fontSize: 15.0),
                     ),
-                    // const Text(
-                    //   "@2024 MD creation,All rights reserved",
-                    //   style: TextStyle(color: Colors.black,fontSize: 15.0,fontStyle: FontStyle.italic,fontWeight: FontWeight.w300),
-                    // ),
-
+                    SizedBox(height: 10.0),
                   ],
                 ),
               ),
+
+              // Footer text
+              // Text(
+              //   "@2024 MD creation,All rights reserved",
+              //   style: TextStyle(
+              //     color: Colors.black,
+              //     fontSize: 15.0,
+              //     fontStyle: FontStyle.italic,
+              //     fontWeight: FontWeight.w300,
+              //   ),
+              // ),
             ],
           ),
         ),
